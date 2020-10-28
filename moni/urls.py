@@ -14,17 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from core.views import home_view, solicitud_view, prestamos_list_view, prestamos_edit_view, PrestamosDeleteView, prestamos_delete_view
-
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import login, logout
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view),
     path('solicitud/',solicitud_view,name="solicitud"),
-    path('prestamos/',prestamos_list_view),
-    path('prestamos/<int:pk>/update',prestamos_edit_view),
-    path('prestamos/<int:pk>/delete',PrestamosDeleteView.as_view()),
-
+    path('prestamos/',staff_member_required(prestamos_list_view), name='prestamos'),
+    path('prestamos/<int:pk>/update',staff_member_required(prestamos_edit_view)),
+    path('prestamos/<int:pk>/delete',staff_member_required(PrestamosDeleteView.as_view())),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
