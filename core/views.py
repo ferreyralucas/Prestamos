@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import SolicitudForm
+from .forms import SolicitudForm, EditSolicitudForm
 import requests
 from .models import Prestamo
 from django.views.generic.edit import DeleteView
@@ -66,7 +66,7 @@ def prestamos_list_view(request):
 def prestamos_edit_view(request,pk):
 
     prestamo = get_object_or_404(Prestamo, id=pk)
-    form = SolicitudForm(request.POST or None, instance=prestamo)
+    form = EditSolicitudForm(request.POST or None, instance=prestamo)
     if request.POST:
         if form.is_valid():
             form.save()

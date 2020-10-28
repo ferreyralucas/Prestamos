@@ -14,5 +14,18 @@ class SolicitudForm(forms.ModelForm):
             "monto":"Monto solicitado"
 
         }
-    def clean(self):
-        self.cleaned_data.get("dni")
+
+class EditSolicitudForm(forms.ModelForm):
+    class Meta:
+        model = Prestamo
+        fields = ('dni', 'nombre', 'apellido', 'genero','email','monto','aprobado')
+        labels = {
+            "dni":"DNI",
+            "nombre":"Nombre",
+            "apellido":"Apellido",
+            "genero":"Genero",
+            "email":"Email",
+            "monto":"Monto solicitado",
+            "aprobado":"Aprobado"
+
+        }
