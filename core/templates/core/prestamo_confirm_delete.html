@@ -1,0 +1,9 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{%block content %}
+<form method="post">{% csrf_token %}
+    <p><strong>¿Desea elminar el prestamo {{prestamo.id}}?</strong></p>
+    <button type="submit" class="btn btn-danger btn-sm">Confirmar</button>
+</form>
+{%endblock content%}
