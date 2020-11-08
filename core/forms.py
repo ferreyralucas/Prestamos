@@ -14,6 +14,14 @@ class SolicitudForm(forms.ModelForm):
             "monto":"Monto solicitado"
 
         }
+        widgets = {
+            'dni': forms.TextInput(
+                attrs = {
+                    "class":"form-control",
+                    "placeholder":"Ingrese el DNI"
+                }
+            )
+        }
 
 class EditSolicitudForm(forms.ModelForm):
     class Meta:

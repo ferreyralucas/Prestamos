@@ -1,14 +1,30 @@
+import requests
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import SolicitudForm, EditSolicitudForm
-import requests
 from .models import Prestamo
 from django.views.generic.edit import DeleteView
+from django.views.generic import TemplateView, ListView, UpdateView
+from django.urls import reverse_lazy
 
-# Create your views here.
 
-def home_view(request):
 
-    return render(request, "core/home.html")
+class Inicio(TemplateView):
+    template_name = "core/home.html"
+
+class EditarPrestamo(UpdateView):
+    model = Prestamo
+    template_name = "core/form_pedir_prestamo.html"
+    form_class = EditSolicitudForm
+    success_url = reverse_lazy("/")
+
+class ListarPrestamos(ListView):
+    template_name = "core/tabla_prestamos.html"
+    queryset = Prestamo.objects.all()
+    context_object_name = "prestamos"
+
+class PrestamosDeleteView(DeleteView):
+    model = Prestamo
+    success_url = '/prestamos/'
 
 def solicitud_view(request):
 
@@ -54,38 +70,3 @@ def respuesta(dni):
     else:
         return False
 
-
-def prestamos_list_view(request):
-
-    queryset = Prestamo.objects.all()
-    context = {
-        'prestamos':queryset,
-    }
-    return render(request,"core/tabla_prestamos.html", context)
-
-def prestamos_edit_view(request,pk):
-
-    prestamo = get_object_or_404(Prestamo, id=pk)
-    form = EditSolicitudForm(request.POST or None, instance=prestamo)
-    if request.POST:
-        if form.is_valid():
-            form.save()
-            return redirect("/prestamos/")
-
-    context = {
-        'form':form,
-        'form_id':'prestamo_edit',
-        'Title':'Editar Solicitud',
-        'form_type':'edit'
-    }
-    return render(request, "core/form_pedir_prestamo.html",context)
-
-def prestamos_delete_view(request,pk):
-
-    prestamo = get_object_or_404(Prestamo, id=pk)
-    prestamo.delete()
-    return redirect("/prestamos/")
-
-class PrestamosDeleteView(DeleteView):
-    model = Prestamo
-    success_url = '/prestamos/'
